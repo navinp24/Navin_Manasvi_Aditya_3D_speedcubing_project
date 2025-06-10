@@ -73,7 +73,7 @@ def exec(x):
     elif x == 'h':
         rotate(front, vec(0, 0, 1), -pi, vec(0, 0, 1.1))
     elif x == 'w':
-        rotate(back, vec(0, 0, 1), pi, vec(0, 0, -1.1))  pi
+        rotate(back, vec(0, 0, 1), pi, vec(0, 0, -1.1))  
     elif x == 'f':
         rotate(top, vec(0, 1, 0), pi, vec(0, 1.1, 0))
     elif x == 's':
