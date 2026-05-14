@@ -1,0 +1,99 @@
+from vpython import *
+
+# 1) Create and configure the canvas
+scene = canvas(
+    title='My Red Layout VPython App',
+    width=800, height=500,
+    align='center'
+)
+
+# 2) Build a single HTML+CSS+JS block
+scene.caption = """
+<script>
+document.body.style.margin = '0';
+document.body.style.padding = '0';
+document.body.style.backgroundColor = 'red';
+document.body.style.display = 'flex';
+document.body.style.justifyContent = 'center';
+document.body.style.alignItems = 'center';
+document.body.style.height = '100vh';
+
+const canvasWrapper = document.querySelector('#glowscript');
+canvasWrapper.style.display = 'flex';
+canvasWrapper.style.flexDirection = 'row';
+canvasWrapper.style.alignItems = 'center';
+
+const infoBox = document.createElement('div');
+infoBox.style.marginLeft = '30px';
+infoBox.style.color = 'white';
+infoBox.style.fontSize = '20px';
+infoBox.innerHTML = '<p>🚀 Welcome to the Simulation!</p><p>Use arrow keys to rotate.</p>';
+
+canvasWrapper.appendChild(infoBox);
+</script>
+<script>
+  const navHTML = `
+    <style>
+      .navbar {
+        display: flex;
+        align-items: center;
+        background-color: #333;
+        padding: 0.5rem 1rem;
+      }
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-right: 1rem;
+        font-family: Arial, sans-serif;
+      }
+      .navbar a:hover {
+        text-decoration: underline;
+      }
+    </style>
+    <nav class="navbar">
+      <a href='#'>Home</a>
+      <a href='#'>About</a>
+      <a href='#'>Gallery</a>
+      <a href='#'>Contact</a>
+    </nav>
+  `;
+  // Insert navbar once at the top of the page
+  if (!document.getElementById('vpython-navbar')) {
+    const wrapper = document.createElement('div');
+    wrapper.id = 'vpython-navbar';
+    wrapper.innerHTML = navHTML;
+    document.body.insertBefore(wrapper, document.body.firstChild);
+  }
+</script>
+
+<!-- CAPTION STYLES -->
+<style>
+  .custom-caption {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    margin: 10px 0;
+    font-family: Arial, sans-serif;
+  }
+  .cta-button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  .cta-button:hover {
+    transform: scale(1.05);
+    background-color: #c0392b;
+  }
+</style>
+"""
+
+# 3) Your 3D content
+box(color=color.blue, size=vector(2, 2, 2))
+
+# 4) Animation loop
+while True:
+    rate(100)

@@ -1,0 +1,65 @@
+import cv2
+import numpy as np
+from data_file import camera
+color_map = {
+    1 : 'White',
+    2 : 'Orange',
+    3 : 'Green',
+    4 : 'Red',
+    5 : 'Blue',
+    6 : 'Yellow'
+}
+def get_color():
+    cap = cv2.VideoCapture(camera)  # Change index if needed (e.g., 0 or 1)
+
+    dot_x, dot_y = None, None
+    alpha = 0.5
+    square_size = 400
+    circle_radius = 20
+
+    color_bgr = []  # Will be a list of [B, G, R]
+    count = 0
+
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        flip = cv2.flip(frame, 1)
+        h, w = flip.shape[:2]
+        if dot_x is None or dot_y is None:
+            dot_x, dot_y = w // 2, h // 2
+
+        overlay = flip.copy()
+        top_left = (dot_x - square_size // 2, dot_y - square_size // 2)
+        bottom_right = (dot_x + square_size // 2, dot_y + square_size // 2)
+
+        cv2.rectangle(overlay, top_left, bottom_right, (0, 0, 0), 0)
+        cv2.circle(overlay, (dot_x, dot_y), circle_radius, (0, 0, 0), 0)
+        cv2.addWeighted(overlay, alpha, flip, 1 - alpha, 0, flip)
+
+        cv2.putText(flip, f"Captured: {count}/6", (10, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(flip, f"Color:"+color_map[count+1], (10, 60),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+        cv2.imshow("Webcam - Press SPACE to capture BGR", flip)
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == 27:  # ESC
+            break
+        elif key == 32:  # SPACE
+            bgr = flip[dot_y, dot_x].tolist()  # Convert to [B, G, R]
+            color_bgr.append(bgr)
+            count += 1
+            if count == 6:
+                break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+    return np.array(color_bgr, dtype=np.uint8)  
+
+if __name__ == "__main__":
+    color_bgr = get_color()
+    print("Test capture:", color_bgr)
